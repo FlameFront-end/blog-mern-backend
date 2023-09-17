@@ -28,7 +28,7 @@ app.post('/auth/register', registerValidation, async (req, res) => {
 
   // Шифрование пароля
   const password = req.body.password
-  const salt = await bcrypt.genSalt(30)
+  const salt = await bcrypt.genSalt(2)
   const passwordHash = await bcrypt.hash(password, salt)
 
   const doc = new UserModel({
