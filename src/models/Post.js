@@ -9,6 +9,7 @@ const PostSchema = new mongoose.Schema(
     text: {
       type: String,
       required: true,
+      unique: true,
     },
     tags: {
       type: Array,
@@ -23,10 +24,10 @@ const PostSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    avatarUrl: String,
+    imageUrl: String,
   },
   {
-    imageUrl: true,
+    timestamps: true,
   },
 );
 
