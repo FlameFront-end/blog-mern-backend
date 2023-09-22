@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
+import cors from "cors";
+
 import {
   loginValidation,
   postCreateValidation,
@@ -32,6 +34,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.use(express.json()); // чтобы читать json
+app.use(cors());
 app.use("/uploads", express.static("uploads")); //отображение статичных файлов
 
 app.post(
