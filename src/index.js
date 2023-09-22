@@ -6,15 +6,8 @@ import {
   postCreateValidation,
   registerValidation,
 } from "./validation/validation.js";
-import checkAuth from "./utils/checkAuth.js";
-import { getMe, login, register } from "./controlers/UserController.js";
-import {
-  create,
-  getAll,
-  getOne,
-  remove,
-  update,
-} from "./controlers/PostController.js";
+import { PostController, UserController } from "./controlers/index.js";
+import { checkAuth, handleValidationErrors } from "./utils/index.js";
 
 mongoose
   .connect("mongodb://localhost/blog")
@@ -41,9 +34,19 @@ const upload = multer({ storage });
 app.use(express.json()); // чтобы читать json
 app.use("/uploads", express.static("uploads")); //отображение статичных файлов
 
-app.post("/auth/register", registerValidation, register);
-app.post("/auth/login", loginValidation, login);
-app.get("/auth/me", checkAuth, getMe);
+app.post(
+  "/auth/register",
+  registerValidation,
+  handleValidationErrors,
+  UserController.register,
+);
+app.post(
+  "/auth/login",
+  loginValidation,
+  handleValidationErrors,
+  UserController.login,
+);
+app.get("/auth/me", checkAuth, UserController.getMe);
 
 app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
   res.json({
@@ -51,11 +54,23 @@ app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
   });
 });
 
-app.get("/posts", getAll);
-app.get("/posts/:id", getOne);
-app.post("/posts", checkAuth, postCreateValidation, create);
-app.delete("/posts/:id", checkAuth, remove);
-app.patch("/posts/:id", checkAuth, postCreateValidation, update);
+app.get("/posts", PostController.getAll);
+app.get("/posts/:id", PostController.getOne);
+app.post(
+  "/posts",
+  checkAuth,
+  postCreateValidation,
+  handleValidationErrors,
+  PostController.create,
+);
+app.delete("/posts/:id", checkAuth, PostController.remove);
+app.patch(
+  "/posts/:id",
+  checkAuth,
+  postCreateValidation,
+  handleValidationErrors,
+  PostController.update,
+);
 
 app.listen(4444, (err) => {
   if (err) {
