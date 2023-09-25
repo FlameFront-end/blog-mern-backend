@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start:dev": "nodemon src/index.js"
+    "start:dev": "nodemon src/index.js",
+    "build": "npm run build"
   },
   "author": "FlameFront-end",
   "license": "ISC",

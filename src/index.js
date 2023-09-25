@@ -12,7 +12,7 @@ import { PostController, UserController } from "./controlers/index.js";
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 
 mongoose
-  .connect("mongodb://localhost/blog")
+  .connect(process.env.MONGODB_URL)
   .then(() => {
     console.log("DB Ok");
   })
@@ -77,7 +77,7 @@ app.patch(
   PostController.update,
 );
 
-app.listen(4444, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
   if (err) {
     return console.error(err);
   }
