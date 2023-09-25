@@ -34,7 +34,7 @@ export const getOne = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    PostModel.findOneAndUpdate(
+    const doc = await PostModel.findOneAndUpdate(
       {
         _id: postId,
       },
@@ -44,27 +44,19 @@ export const getOne = async (req, res) => {
       {
         returnDocument: "after",
       },
-      (err, doc) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            message: "Не удалось вернуть статью",
-          });
-        }
-
-        if (!doc) {
-          return res.status(404).json({
-            message: "Статья не найдена",
-          });
-        }
-
-        res.json(doc);
-      },
     ).populate("user");
+
+    if (!doc) {
+      return res.status(404).json({
+        message: "Статья не найдена",
+      });
+    }
+
+    res.json(doc);
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      message: "Не удалось получить статьи",
+      message: "Не удалось получить статью",
     });
   }
 };
@@ -73,37 +65,26 @@ export const remove = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    PostModel.findOneAndDelete(
-      {
-        _id: postId,
-      },
-      (err, doc) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            message: "Не удалось удалить статью",
-          });
-        }
+    const doc = await PostModel.findOneAndDelete({
+      _id: postId,
+    });
 
-        if (!doc) {
-          return res.status(404).json({
-            message: "Статья не найдена",
-          });
-        }
+    if (!doc) {
+      return res.status(404).json({
+        message: "Статья не найдена",
+      });
+    }
 
-        res.json({
-          success: true,
-        });
-      },
-    );
+    res.json({
+      success: true,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      message: "Не удалось получить статьи",
+      message: "Не удалось удалить статью",
     });
   }
 };
-
 export const create = async (req, res) => {
   try {
     const doc = new PostModel({
