@@ -12,7 +12,7 @@ import { PostController, UserController } from "./controlers/index.js";
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 
 mongoose
-  .connect(process.env.MONGODB_URL)
+  .connect("mongodb://localhost/blog")
   .then(() => {
     console.log("DB Ok");
   })
