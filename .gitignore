@@ -1,5 +1,5 @@
 node_modules
 .idea
-
-# Local Netlify folder
-.netlify
+.env
+.vercel
+vercel.json
